@@ -1,0 +1,855 @@
+{% extends "base.html" %}
+{% block title %}About — Hidden Gem Digitals{% endblock %}
+
+{% block head %}
+<style>
+
+  .page-hero {
+    padding: 140px 5vw 80px;
+    background: var(--off);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 50vw; height: 100%;
+    background: linear-gradient(135deg, transparent 30%, rgba(173,231,231,.2) 100%);
+    pointer-events: none;
+  }
+
+  .page-hero-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+
+  .page-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -.025em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .page-hero p {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+
+  /* ── Profile card ────────────────────────────────────────── */
+  .profile-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(0,0,0,.05);
+  }
+
+  .profile-card-top {
+    background: linear-gradient(135deg, var(--c5) 0%, var(--ink) 100%);
+    padding: 40px 32px 100px;
+    position: relative;
+  }
+
+  .profile-card-top h3 {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    color: var(--white);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .profile-card-top p {
+    font-size: .82rem;
+    color: rgba(255,255,255,.65);
+  }
+
+  .profile-avatar {
+    position: absolute;
+    bottom: -44px;
+    left: 32px;
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c2), var(--c4));
+    border: 4px solid var(--white);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .profile-card-body {
+    padding: 60px 32px 32px;
+  }
+
+  .profile-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .profile-detail-icon {
+    width: 36px; height: 36px;
+    background: var(--off);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem;
+    flex-shrink: 0;
+  }
+
+  .profile-detail-label {
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+
+  .profile-detail-value {
+    font-size: .9rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── Mission section ─────────────────────────────────────── */
+  .mission-section {
+    padding: 100px 5vw;
+    background: var(--white);
+  }
+
+  .mission-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .mission-visual {
+    background: var(--ink);
+    border-radius: 20px;
+    padding: 48px 40px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .mission-visual h3 {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    color: var(--white);
+    font-weight: 600;
+    margin-bottom: 24px;
+    line-height: 1.3;
+  }
+
+  .mission-stat-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mission-stat {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    background: rgba(255,255,255,.06);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  .mission-stat-num {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--c2);
+    flex-shrink: 0;
+    width: 64px;
+    text-align: center;
+  }
+
+  .mission-stat-label strong {
+    display: block;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .mission-stat-label span {
+    font-size: .75rem;
+    color: rgba(255,255,255,.5);
+    line-height: 1.5;
+  }
+
+  .mission-content { padding-top: 8px; }
+
+  .mission-content h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -.02em;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .mission-content p {
+    font-size: .975rem;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+
+  .mission-content p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 32px;
+  }
+
+  .skill-item {
+    background: var(--off);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border: 1px solid rgba(173,231,231,.3);
+  }
+
+  .skill-item h4 {
+    font-weight: 700;
+    font-size: .85rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .skill-item p {
+    font-size: .78rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  /* ── Contact section ─────────────────────────────────────── */
+  .contact-section {
+    padding: 100px 5vw;
+    background: var(--off);
+    scroll-margin-top: 80px;
+  }
+
+  .contact-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-info h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -.025em;
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+
+  .contact-info p {
+    font-size: .975rem;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .contact-method {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .contact-method-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--c2), var(--c4));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-method-label {
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    margin-bottom: 3px;
+  }
+
+  .contact-method-value {
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .contact-method-value a {
+    color: var(--c5);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .contact-method-sub {
+    font-size: .78rem;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  /* ── Form ────────────────────────────────────────────────── */
+  .contact-form-wrap {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 48px 44px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(173,231,231,.3);
+  }
+
+  .contact-form-wrap h3 {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .contact-form-wrap .form-sub {
+    font-size: .875rem;
+    color: var(--ink-soft);
+    margin-bottom: 32px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--ink-mid);
+    letter-spacing: .02em;
+  }
+
+  label .req { color: var(--c5); margin-left: 2px; }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid rgba(0,0,0,.1);
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: .9rem;
+    color: var(--ink);
+    background: var(--white);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--c4);
+    box-shadow: 0 0 0 3px rgba(151,216,226,.2);
+  }
+
+  textarea { resize: vertical; min-height: 130px; }
+
+  .form-submit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .form-note {
+    font-size: .78rem;
+    color: var(--ink-soft);
+  }
+
+  .btn-submit {
+    background: var(--ink);
+    color: var(--white);
+    border: none;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: .875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    letter-spacing: .02em;
+  }
+
+  .btn-submit:hover {
+    background: var(--ink-mid);
+    transform: translateY(-1px);
+  }
+
+  /* ── FAQ ─────────────────────────────────────────────────── */
+  .faq-section {
+    padding: 80px 5vw;
+    background: var(--white);
+  }
+
+  .faq-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-header { text-align: center; margin-bottom: 48px; }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    padding: 22px 0;
+  }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    gap: 20px;
+  }
+
+  .faq-question h4 {
+    font-weight: 600;
+    font-size: .975rem;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .faq-toggle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--off);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    flex-shrink: 0;
+    transition: background .2s, transform .2s;
+    font-weight: 300;
+  }
+
+  .faq-answer {
+    font-size: .9rem;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease, padding .25s;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 300px;
+    padding-top: 14px;
+  }
+
+  .faq-item.open .faq-toggle {
+    background: var(--c2);
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 900px) {
+    .page-hero-inner { grid-template-columns: 1fr; gap: 48px; }
+    .mission-inner   { grid-template-columns: 1fr; }
+    .contact-inner   { grid-template-columns: 1fr; }
+    .mission-visual  { position: static; }
+  }
+
+  @media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    .contact-form-wrap { padding: 28px 22px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Page hero ──────────────────────────────────────────────── -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div>
+      <div class="section-label">The Person Behind the Work</div>
+      <h1>Built by a neighbor,<br>not an agency</h1>
+      <p>
+        I am a Columbia Engineering student who walks these blocks every day.
+        I started Hidden Gem Digitals because I kept noticing the same gap —
+        incredible local businesses with loyal customers and no website to show for it.
+      </p>
+      <p>
+        I am not a large firm. I do not have a sales team or a contract full of fine print.
+        I am one person who builds clean, professional websites for the independent businesses
+        that make Manhattan worth living in.
+      </p>
+      <a href="#contact" class="btn btn-primary" style="margin-top:12px;">Work With Me</a>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-card-top">
+        <h3>Hidden Gem Digitals</h3>
+        <p>Manhattan Local Web Studio</p>
+        <div class="profile-avatar">HG</div>
+      </div>
+      <div class="profile-card-body">
+        <div class="profile-detail">
+          <div class="profile-detail-icon">&#127891;</div>
+          <div>
+            <div class="profile-detail-label">Education</div>
+            <div class="profile-detail-value">Columbia University, School of Engineering</div>
+          </div>
+        </div>
+        <div class="profile-detail">
+          <div class="profile-detail-icon">&#128205;</div>
+          <div>
+            <div class="profile-detail-label">Location</div>
+            <div class="profile-detail-value">Morningside Heights, Manhattan</div>
+          </div>
+        </div>
+        <div class="profile-detail">
+          <div class="profile-detail-icon">&#128187;</div>
+          <div>
+            <div class="profile-detail-label">Specialty</div>
+            <div class="profile-detail-value">Local business websites, Google optimization</div>
+          </div>
+        </div>
+        <div class="profile-detail">
+          <div class="profile-detail-icon">&#128337;</div>
+          <div>
+            <div class="profile-detail-label">Typical Timeline</div>
+            <div class="profile-detail-value">Live within 14 days of first conversation</div>
+          </div>
+        </div>
+        <div class="profile-detail">
+          <div class="profile-detail-icon">&#128172;</div>
+          <div>
+            <div class="profile-detail-label">Contact</div>
+            <div class="profile-detail-value">hello@hiddengemdigitals.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Mission section ────────────────────────────────────────── -->
+<section class="mission-section">
+  <div class="mission-inner">
+    <div class="mission-visual">
+      <h3>The Hidden Gem<br>Opportunity in Numbers</h3>
+      <div class="mission-stat-row">
+        <div class="mission-stat">
+          <div class="mission-stat-num">165+</div>
+          <div class="mission-stat-label">
+            <strong>Businesses identified across Manhattan</strong>
+            <span>Highly-rated shops without any web presence — barbershops, salons, delis, cleaners, and more</span>
+          </div>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-num">4.7</div>
+          <div class="mission-stat-label">
+            <strong>Average Google rating of identified businesses</strong>
+            <span>These are not struggling shops — they are excellent shops that happen to be invisible online</span>
+          </div>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-num">80%</div>
+          <div class="mission-stat-label">
+            <strong>Of customers research online before visiting</strong>
+            <span>Without a website, a significant share of potential customers go elsewhere before they ever walk in</span>
+          </div>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-num">14</div>
+          <div class="mission-stat-label">
+            <strong>Days from first call to live website</strong>
+            <span>No lengthy agency process. You talk to me directly and I build it fast.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mission-content">
+      <div class="section-label">Why I Built This</div>
+      <h2>Every chain on your block has a website. Your shop deserves one too.</h2>
+      <p>
+        I study engineering and I think about systems. The system I kept seeing in my neighborhood
+        was broken in a specific way: <strong>the best businesses were losing customers
+        to worse ones simply because of discoverability.</strong>
+      </p>
+      <p>
+        A customer new to the neighborhood searches "barbershop near me" and clicks the first result
+        with a website. Your shop — with 4.8 stars and a 10-year reputation — does not show up
+        because there is nothing for Google to index. That is a solvable problem.
+      </p>
+      <p>
+        I built Hidden Gem Digitals to fix that gap one business at a time, starting with the
+        neighborhood I actually live in. Every site I build is designed to put your real reputation
+        front and center — your stars, your reviews, your services, your story.
+      </p>
+      <p>
+        I am not trying to scale this into a large company. I want to do good work for people
+        who deserve better digital representation, and I want to do it at a price that makes
+        sense for an independent business owner.
+      </p>
+
+      <div class="skills-grid">
+        <div class="skill-item">
+          <h4>Front-End Development</h4>
+          <p>Clean, fast HTML, CSS, and JavaScript. No bloated page builders.</p>
+        </div>
+        <div class="skill-item">
+          <h4>Mobile-First Design</h4>
+          <p>Every site looks and works perfectly on a phone screen.</p>
+        </div>
+        <div class="skill-item">
+          <h4>Google Business Sync</h4>
+          <p>Your reviews, hours, and map listing connected to your site.</p>
+        </div>
+        <div class="skill-item">
+          <h4>Booking Integration</h4>
+          <p>Calendly, Square, or custom forms so customers can book online.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ────────────────────────────────────────────────── -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <div class="section-label">Get in Touch</div>
+      <h2>Let's talk about your business</h2>
+      <p>
+        Fill out the form and I will get back to you within 24 hours.
+        If you want, mention your Google star rating — I will look you up and
+        come to our first conversation already knowing your business.
+      </p>
+
+      <div class="contact-methods">
+        <div class="contact-method">
+          <div class="contact-method-icon">&#128231;</div>
+          <div>
+            <div class="contact-method-label">Email</div>
+            <div class="contact-method-value">
+              <a href="mailto:hello@hiddengemdigitals.com">hello@hiddengemdigitals.com</a>
+            </div>
+            <div class="contact-method-sub">Response within 24 hours</div>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="contact-method-icon">&#128205;</div>
+          <div>
+            <div class="contact-method-label">Location</div>
+            <div class="contact-method-value">Columbia University, Morningside Heights</div>
+            <div class="contact-method-sub">Available to meet anywhere in Manhattan</div>
+          </div>
+        </div>
+        <div class="contact-method">
+          <div class="contact-method-icon">&#128337;</div>
+          <div>
+            <div class="contact-method-label">Free Demo</div>
+            <div class="contact-method-value">No cost, no commitment</div>
+            <div class="contact-method-sub">I build a demo of your site before any money changes hands</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap">
+      <h3>Request a Free Demo</h3>
+      <p class="form-sub">I will build a working website demo using your real business information — at no charge, with no obligation to buy.</p>
+
+      <form method="POST" action="{{ url_for('about') }}#contact">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" placeholder="e.g. Ray Castillo" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="you@yourbusiness.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="business">Business Name</label>
+          <input type="text" id="business" name="business" placeholder="e.g. Ray's Barbershop, Inwood" />
+        </div>
+
+        <div class="form-group">
+          <label for="type">Type of Business</label>
+          <select id="type" name="type">
+            <option value="">Select one...</option>
+            <option>Barbershop</option>
+            <option>Nail Salon / Beauty</option>
+            <option>Restaurant / Deli</option>
+            <option>Laundromat / Dry Cleaner</option>
+            <option>Tailor / Cobbler</option>
+            <option>Pharmacy</option>
+            <option>Grocery / Bodega</option>
+            <option>Auto Repair</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Anything else I should know? <span class="req">*</span></label>
+          <textarea id="message" name="message" placeholder="Tell me about your business — your hours, your specialties, what makes you different. Even better: share your Google Maps link if you have one and I will pull your reviews directly." required></textarea>
+        </div>
+
+        <div class="form-submit">
+          <span class="form-note">I typically respond within one business day.</span>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────────────────────────────── -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <div class="section-label">Common Questions</div>
+      <h2 class="section-heading">Things owners ask me</h2>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h4>Do I need to provide anything to get started?</h4>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Not much. If you have a Google Business listing — which most of you already do — I can pull your
+        photos, reviews, address, and hours directly from there. The main thing I need from you is
+        30 minutes to talk about what makes your business special so I can write the copy correctly.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h4>What if I want changes after seeing the demo?</h4>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        That is what the demo is for. Every package includes at least one full round of revisions —
+        meaning you can change colors, layout, copy, photos, anything — before the site goes live.
+        I would rather get it exactly right than have you settle for something close.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h4>What does the monthly care plan actually cover?</h4>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Hosting, SSL certificate, and up to two content updates per month — things like changing your
+        hours, adding a new service, updating photos, or swapping out a staff member. It also includes
+        keeping your Google Business profile synced with your site. If something breaks, I fix it the
+        same day. No ticket system, no call center — you text me directly.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h4>How long does the whole thing take?</h4>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        From our first conversation to a live website is typically 10 to 14 days. The demo usually
+        takes 48 hours after our call. Revisions add a few days depending on how much you want changed.
+        If you have a specific date in mind — a grand reopening, a seasonal push, a special event —
+        tell me and I will prioritize accordingly.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h4>Will the website show up on Google?</h4>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Every site I build is optimized for local search from day one — correct meta tags, fast
+        load times, mobile-first code, and a Google Business integration that links your site
+        back to your Maps listing. You will not rank on page one overnight, but within 4 to 8 weeks
+        of launch most businesses see meaningful improvement in how they appear in local searches.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <h4>What happens if you graduate and leave?</h4>
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Fair question. Every site is built on standard code that any web developer can pick up.
+        You own the domain and the hosting account — not me. If I ever stopped doing this,
+        you would have a fully functional website that another developer could maintain without
+        starting from scratch. I will also give you a full handover document explaining exactly
+        how everything works.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+
+{% endblock %}

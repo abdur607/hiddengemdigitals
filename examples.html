@@ -1,0 +1,918 @@
+{% extends "base.html" %}
+{% block title %}Examples — Hidden Gem Digitals{% endblock %}
+
+{% block head %}
+<style>
+
+  .page-hero {
+    padding: 140px 5vw 80px;
+    background: var(--off);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60vw; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(173,231,231,.18) 100%);
+    pointer-events: none;
+  }
+
+  .page-hero-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .page-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -.025em;
+    line-height: 1.1;
+    color: var(--ink);
+    max-width: 640px;
+    margin-bottom: 18px;
+  }
+
+  .page-hero p {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 520px;
+    line-height: 1.75;
+  }
+
+  /* ── Filter tabs ─────────────────────────────────────────── */
+  .filter-bar {
+    background: var(--white);
+    border-bottom: 1px solid rgba(173,231,231,.4);
+    padding: 0 5vw;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .filter-btn {
+    padding: 18px 20px;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+    font-family: var(--sans);
+  }
+
+  .filter-btn:hover { color: var(--ink); }
+  .filter-btn.active { color: var(--ink); border-bottom-color: var(--c5); }
+
+  /* ── Portfolio grid ──────────────────────────────────────── */
+  .portfolio-section {
+    padding: 72px 5vw;
+    background: var(--white);
+  }
+
+  .portfolio-inner { max-width: 1160px; margin: 0 auto; }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .portfolio-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 2px 16px rgba(0,0,0,.05);
+    transition: transform .25s, box-shadow .25s;
+    background: var(--white);
+  }
+
+  .portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .portfolio-card.featured {
+    grid-column: span 2;
+  }
+
+  .card-screen {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .portfolio-card.featured .card-screen { height: 260px; }
+
+  /* Barbershop screen */
+  .screen-barber {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0d1f2d 100%);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen-barber .s-nav {
+    background: rgba(255,255,255,.05);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .screen-barber .s-logo {
+    font-family: var(--serif);
+    font-size: .9rem;
+    color: var(--c2);
+    font-weight: 600;
+  }
+
+  .screen-barber .s-nav-links {
+    display: flex; gap: 14px;
+  }
+
+  .screen-barber .s-nav-links span {
+    font-size: .6rem;
+    color: rgba(255,255,255,.5);
+  }
+
+  .screen-barber .s-hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+  }
+
+  .screen-barber .s-text h3 {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .screen-barber .s-text p {
+    font-size: .65rem;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 12px;
+  }
+
+  .screen-barber .s-btn {
+    display: inline-block;
+    background: var(--c5);
+    color: var(--white);
+    font-size: .6rem;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 4px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .screen-barber .s-image {
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, var(--c3), var(--c5));
+    border-radius: 50%;
+    flex-shrink: 0;
+    opacity: .6;
+  }
+
+  /* Restaurant screen */
+  .screen-restaurant {
+    background: #faf7f2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen-restaurant .s-nav {
+    background: #2d1b0e;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .screen-restaurant .s-logo {
+    font-family: var(--serif);
+    font-size: .85rem;
+    color: #e8c99a;
+    font-weight: 600;
+  }
+
+  .screen-restaurant .s-hero-img {
+    height: 100px;
+    background: linear-gradient(135deg, #c17f24 0%, #e8a838 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .screen-restaurant .s-hero-img span {
+    font-size: 2rem;
+  }
+
+  .screen-restaurant .s-info {
+    padding: 12px 16px;
+    flex: 1;
+  }
+
+  .screen-restaurant .s-info h3 {
+    font-family: var(--serif);
+    font-size: .95rem;
+    color: #2d1b0e;
+    margin-bottom: 4px;
+  }
+
+  .screen-restaurant .s-stars {
+    display: flex; gap: 2px; margin-bottom: 6px;
+  }
+
+  .screen-restaurant .s-stars span {
+    font-size: .6rem;
+    color: #f59e0b;
+  }
+
+  .screen-restaurant .s-meta {
+    font-size: .6rem;
+    color: #8a6a4a;
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Nail salon screen */
+  .screen-nails {
+    background: #fdf6ff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen-nails .s-nav {
+    background: var(--white);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+
+  .screen-nails .s-logo {
+    font-family: var(--serif);
+    font-size: .85rem;
+    color: #7c3aed;
+    font-weight: 600;
+  }
+
+  .screen-nails .s-body {
+    flex: 1;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .screen-nails .s-service {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 10px;
+    border: 1px solid rgba(124,58,237,.1);
+  }
+
+  .screen-nails .s-service-dot {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+  }
+
+  .screen-nails .s-service h4 {
+    font-size: .62rem;
+    font-weight: 700;
+    color: #4a1d96;
+    margin-bottom: 2px;
+  }
+
+  .screen-nails .s-service p {
+    font-size: .55rem;
+    color: #7c3aed;
+    font-weight: 600;
+  }
+
+  /* Laundromat screen */
+  .screen-laundry {
+    background: var(--c1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: center;
+  }
+
+  .screen-laundry h3 {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .screen-laundry p {
+    font-size: .65rem;
+    color: var(--ink-mid);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .screen-laundry .s-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .screen-laundry .s-pill {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: .6rem;
+    font-weight: 600;
+    color: var(--ink-mid);
+  }
+
+  /* Deli screen */
+  .screen-deli {
+    background: #1a1a1a;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen-deli .s-header {
+    background: #e63946;
+    padding: 12px 16px;
+    text-align: center;
+  }
+
+  .screen-deli .s-logo {
+    font-family: var(--serif);
+    font-size: .95rem;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .screen-deli .s-sub {
+    font-size: .55rem;
+    color: rgba(255,255,255,.7);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .screen-deli .s-menu {
+    flex: 1;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .screen-deli .s-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding-bottom: 7px;
+  }
+
+  .screen-deli .s-item-name {
+    font-size: .65rem;
+    color: rgba(255,255,255,.8);
+    font-weight: 500;
+  }
+
+  .screen-deli .s-item-price {
+    font-size: .65rem;
+    color: #e63946;
+    font-weight: 700;
+  }
+
+  /* Dry cleaner screen */
+  .screen-cleaner {
+    background: #f0f9ff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen-cleaner .s-nav {
+    background: var(--c5);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .screen-cleaner .s-logo {
+    font-family: var(--serif);
+    font-size: .85rem;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .screen-cleaner .s-body {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .screen-cleaner .s-step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .screen-cleaner .s-step-num {
+    width: 22px; height: 22px;
+    background: var(--c5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .6rem;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .screen-cleaner .s-step-text strong {
+    display: block;
+    font-size: .65rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .screen-cleaner .s-step-text span {
+    font-size: .58rem;
+    color: var(--ink-soft);
+  }
+
+  /* Card footer */
+  .card-footer {
+    padding: 20px 22px;
+    border-top: 1px solid rgba(0,0,0,.05);
+  }
+
+  .card-biz-name {
+    font-weight: 700;
+    font-size: .95rem;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .card-type {
+    font-size: .72rem;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .card-type::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--c4);
+  }
+
+  .card-location {
+    font-size: .72rem;
+    color: var(--ink-soft);
+  }
+
+  .card-tag {
+    font-size: .65rem;
+    font-weight: 600;
+    background: var(--c1);
+    color: var(--ink-mid);
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-left: auto;
+  }
+
+  /* ── Testimonial section ─────────────────────────────────── */
+  .testimonial-section {
+    padding: 80px 5vw;
+    background: var(--off);
+  }
+
+  .testimonial-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .testimonial-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .testimonial-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 28px;
+    border: 1px solid rgba(173,231,231,.3);
+  }
+
+  .t-stars {
+    display: flex; gap: 3px; margin-bottom: 14px;
+  }
+
+  .t-stars span { color: #f59e0b; font-size: .85rem; }
+
+  .t-quote {
+    font-size: .9rem;
+    color: var(--ink);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  .t-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .t-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c3), var(--c5));
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .t-name {
+    font-weight: 600;
+    font-size: .85rem;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .t-biz {
+    font-size: .75rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 900px) {
+    .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    .portfolio-card.featured { grid-column: span 2; }
+    .testimonial-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-card.featured { grid-column: span 1; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="section-label">Portfolio</div>
+    <h1>What your website could look like</h1>
+    <p>
+      Each example below is a representative concept for the type of business listed.
+      Every site I build is custom-designed around your actual name, services, photos, and Google reviews.
+    </p>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterCards('all', this)">All</button>
+  <button class="filter-btn" onclick="filterCards('barbershop', this)">Barbershops</button>
+  <button class="filter-btn" onclick="filterCards('restaurant', this)">Restaurants</button>
+  <button class="filter-btn" onclick="filterCards('beauty', this)">Beauty</button>
+  <button class="filter-btn" onclick="filterCards('service', this)">Services</button>
+</div>
+
+<section class="portfolio-section">
+  <div class="portfolio-inner">
+    <div class="portfolio-grid" id="portfolioGrid">
+
+      <!-- Featured: Barbershop -->
+      <div class="portfolio-card featured" data-category="barbershop">
+        <div class="card-screen">
+          <div class="screen-barber">
+            <div class="s-nav">
+              <div class="s-logo">ABL Cuts</div>
+              <div class="s-nav-links">
+                <span>Services</span>
+                <span>Gallery</span>
+                <span>Book</span>
+              </div>
+            </div>
+            <div class="s-hero">
+              <div class="s-text">
+                <h3>West Harlem's<br>Finest Fade</h3>
+                <p>5-star rated. Walk-ins welcome on W 127th St.</p>
+                <span class="s-btn">Book Online</span>
+              </div>
+              <div class="s-image"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-biz-name">ABL Cuts</div>
+          <div class="card-meta">
+            <span class="card-type">Barbershop</span>
+            <span class="card-location">West Harlem</span>
+            <span class="card-tag">5.0 stars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nail Salon -->
+      <div class="portfolio-card" data-category="beauty">
+        <div class="card-screen">
+          <div class="screen-nails">
+            <div class="s-nav">
+              <div class="s-logo">Bella Nails</div>
+              <span style="font-size:.6rem;color:var(--ink-soft);">Book Now</span>
+            </div>
+            <div class="s-body">
+              <div class="s-service">
+                <div class="s-service-dot" style="background:linear-gradient(135deg,#c4b5fd,#7c3aed)"></div>
+                <h4>Gel Manicure</h4>
+                <p>From $45</p>
+              </div>
+              <div class="s-service">
+                <div class="s-service-dot" style="background:linear-gradient(135deg,#fbcfe8,#ec4899)"></div>
+                <h4>Gel X Set</h4>
+                <p>From $65</p>
+              </div>
+              <div class="s-service">
+                <div class="s-service-dot" style="background:linear-gradient(135deg,#a5f3fc,#06b6d4)"></div>
+                <h4>Spa Pedicure</h4>
+                <p>From $50</p>
+              </div>
+              <div class="s-service">
+                <div class="s-service-dot" style="background:linear-gradient(135deg,#fde68a,#f59e0b)"></div>
+                <h4>Nail Art</h4>
+                <p>From $15</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-biz-name">Bella Nails and Beauty</div>
+          <div class="card-meta">
+            <span class="card-type">Nail Salon</span>
+            <span class="card-location">Washington Heights</span>
+            <span class="card-tag">4.9 stars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restaurant / Deli -->
+      <div class="portfolio-card" data-category="restaurant">
+        <div class="card-screen">
+          <div class="screen-deli">
+            <div class="s-header">
+              <div class="s-logo">Sixth Ave Garden</div>
+              <div class="s-sub">Gourmet Deli and Market</div>
+            </div>
+            <div class="s-menu">
+              <div class="s-item">
+                <span class="s-item-name">Chopped Cheese Hero</span>
+                <span class="s-item-price">$9</span>
+              </div>
+              <div class="s-item">
+                <span class="s-item-name">BEC on Everything Bagel</span>
+                <span class="s-item-price">$7</span>
+              </div>
+              <div class="s-item">
+                <span class="s-item-name">Fresh Fruit Cup</span>
+                <span class="s-item-price">$5</span>
+              </div>
+              <div class="s-item">
+                <span class="s-item-name">Coffee (Any Size)</span>
+                <span class="s-item-price">$3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-biz-name">Sixth Ave Garden Gourmet</div>
+          <div class="card-meta">
+            <span class="card-type">Deli / Market</span>
+            <span class="card-location">Chelsea</span>
+            <span class="card-tag">4.8 stars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Laundromat -->
+      <div class="portfolio-card" data-category="service">
+        <div class="card-screen">
+          <div class="screen-laundry">
+            <h3>NYC Wash N Fold</h3>
+            <p>Same-day wash, dry, and fold service on Columbus Ave. Pick-up and delivery available within 5 blocks.</p>
+            <div class="s-pills">
+              <span class="s-pill">Open 7 Days</span>
+              <span class="s-pill">Pickup Available</span>
+              <span class="s-pill">$1.40 / lb</span>
+              <span class="s-pill">5.0 Stars</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-biz-name">NYC Wash N Fold</div>
+          <div class="card-meta">
+            <span class="card-type">Laundromat</span>
+            <span class="card-location">Morningside Heights</span>
+            <span class="card-tag">5.0 stars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ethiopian Restaurant -->
+      <div class="portfolio-card" data-category="restaurant">
+        <div class="card-screen">
+          <div class="screen-restaurant">
+            <div class="s-nav">
+              <div class="s-logo">Massawa</div>
+              <span style="font-size:.6rem;color:rgba(255,255,255,.5);">Reserve</span>
+            </div>
+            <div class="s-hero-img"><span>&#127869;</span></div>
+            <div class="s-info">
+              <h3>Eritrean and Ethiopian Cuisine</h3>
+              <div class="s-stars">
+                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+              </div>
+              <div class="s-meta">
+                <span>Amsterdam Ave</span>
+                <span>Open until 10pm</span>
+                <span>Vegan options</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-biz-name">Massawa</div>
+          <div class="card-meta">
+            <span class="card-type">Restaurant</span>
+            <span class="card-location">Morningside Heights</span>
+            <span class="card-tag">4.5 stars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dry Cleaner -->
+      <div class="portfolio-card" data-category="service">
+        <div class="card-screen">
+          <div class="screen-cleaner">
+            <div class="s-nav">
+              <div class="s-logo">MCMB Cleaners</div>
+              <span style="font-size:.6rem;color:rgba(255,255,255,.8);">Schedule Pickup</span>
+            </div>
+            <div class="s-body">
+              <div class="s-step">
+                <div class="s-step-num">1</div>
+                <div class="s-step-text">
+                  <strong>Drop off or schedule pickup</strong>
+                  <span>Same-day service available Mon–Sat</span>
+                </div>
+              </div>
+              <div class="s-step">
+                <div class="s-step-num">2</div>
+                <div class="s-step-text">
+                  <strong>Expert cleaning and pressing</strong>
+                  <span>Specialist in cashmere and delicate fabrics</span>
+                </div>
+              </div>
+              <div class="s-step">
+                <div class="s-step-num">3</div>
+                <div class="s-step-text">
+                  <strong>Ready same day or next morning</strong>
+                  <span>We text you when it's ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-biz-name">MCMB Cleaners</div>
+          <div class="card-meta">
+            <span class="card-type">Dry Cleaner</span>
+            <span class="card-location">West Harlem</span>
+            <span class="card-tag">4.8 stars</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Testimonials ───────────────────────────────────────────── -->
+<section class="testimonial-section">
+  <div class="testimonial-inner">
+    <div class="testimonial-header">
+      <div class="section-label">What Owners Say</div>
+      <h2 class="section-heading">Built around your reputation</h2>
+    </div>
+
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="t-stars">
+          <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+        </div>
+        <p class="t-quote">
+          "Customers kept calling to ask our hours and whether we take walk-ins.
+          The site answers all of that now. The calls have basically stopped and the bookings went up."
+        </p>
+        <div class="t-author">
+          <div class="t-avatar">RC</div>
+          <div>
+            <div class="t-name">Ray C.</div>
+            <div class="t-biz">Barbershop Owner, Inwood</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="t-stars">
+          <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+        </div>
+        <p class="t-quote">
+          "I was skeptical. I have been in business for 12 years without a website and thought I did not need one.
+          But seeing my 4.9 stars right on the homepage made me realize what I had been leaving on the table."
+        </p>
+        <div class="t-author">
+          <div class="t-avatar">JL</div>
+          <div>
+            <div class="t-name">Julissa L.</div>
+            <div class="t-biz">Nail Salon Owner, Washington Heights</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="t-stars">
+          <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+        </div>
+        <p class="t-quote">
+          "The menu page alone was worth it. People used to ask me to read them the whole menu over the phone.
+          Now I just say 'check the website' and get back to my customers."
+        </p>
+        <div class="t-author">
+          <div class="t-avatar">MK</div>
+          <div>
+            <div class="t-name">Mo K.</div>
+            <div class="t-biz">Deli Owner, Hell's Kitchen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function filterCards(category, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.portfolio-card').forEach(card => {
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+{% endblock %}
